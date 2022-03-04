@@ -48,13 +48,12 @@ public class ShopCart {
         String email = driver.findElement(By.xpath("//*[contains(text(), 'Email')]/..//b")).getText();
         String password = driver.findElement(By.xpath("//*[contains(text(), 'Password')]/..//td[2]")).getText();
 
-        driver.findElement(By.xpath("/html/body/center/table/tbody/tr[6]/td/table/tbody/tr[2]/td/p/a")).click();
-
+        driver.get("https://sharelane.com/cgi-bin/show_book.py?book_id=2");
         driver.findElement(By.name("email")).sendKeys(email);
         driver.findElement(By.name("password")).sendKeys(password);
 
         driver.findElement(By.cssSelector("[value = Login]")).click();
-        // boolean isDisplayed2 = driver.findElement(By.xpath("//span[@class='user']")).isDisplayed();
+        //boolean isDisplayed2 = driver.findElement(By.xpath("//span[@class='user']")).isDisplayed();
         //Assert.assertTrue(isDisplayed2);
 
         driver.get("https://sharelane.com/cgi-bin/show_book.py?book_id=2");
