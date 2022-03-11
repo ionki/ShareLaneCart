@@ -2,8 +2,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.concurrent.TimeUnit;
+
+import static org.testng.Assert.assertEquals;
 
 public class ShopCart {
 
@@ -15,6 +20,7 @@ public class ShopCart {
     public void SetUp(){
         System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
         driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
      /*
@@ -48,17 +54,26 @@ public class ShopCart {
         String email = driver.findElement(By.xpath("//*[contains(text(), 'Email')]/..//b")).getText();
         String password = driver.findElement(By.xpath("//*[contains(text(), 'Password')]/..//td[2]")).getText();
 
-        driver.get("https://sharelane.com/cgi-bin/show_book.py?book_id=2");
+        driver.get("https://www.sharelane.com/cgi-bin/main.py");
         driver.findElement(By.name("email")).sendKeys(email);
         driver.findElement(By.name("password")).sendKeys(password);
 
         driver.findElement(By.cssSelector("[value = Login]")).click();
-        //boolean isDisplayed2 = driver.findElement(By.xpath("//span[@class='user']")).isDisplayed();
-        //Assert.assertTrue(isDisplayed2);
+        driver.findElement(By.name("keyword")).sendKeys("White Fang");
+        driver.findElement(By.cssSelector("[value=Search]")).click();
+        driver.findElement(By.cssSelector("[href='./add_to_cart.py?book_id=2']")).click();
+        driver.findElement(By.cssSelector("[href='./shopping_cart.py']")).click();
 
-        driver.get("https://sharelane.com/cgi-bin/show_book.py?book_id=2");
+        driver.findElement(By.name("q")).clear();
+        driver.findElement(By.name("q")).sendKeys("1");
+        driver.findElement(By.cssSelector("[value=Update]")).click();
+        String price = driver.findElement(By.xpath("//tr[2]//td[7]")).getText();
+        assertEquals(price, "10", "Price is't correct");
+        }
 
-        driver.findElement(By.xpath("/html/body/center/table/tbody/tr[5]/td/table/tbody/tr/td[2]/p[2]/a")).click();
+    @AfterMethod(alwaysRun = true)
+    public void tearDown(){
+        driver.quit();
 
 
 
